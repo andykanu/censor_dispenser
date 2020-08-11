@@ -48,8 +48,20 @@ negative_words = ["concerned", "behind", "danger", "dangerous", "alarming", "ala
 
 #function four - censor surrounding words
 def remove_surrounding_phrases(source_text, phrases_to_remove, negative_words):
-    final_text = remove_many_phrases(source_text, phrases_to_remove)
-    final_text = remove_many_phrases(final_text, negative_words)
+    #remove phrases in list, replacing with "***"
+    interim_text = remove_many_phrases(source_text, phrases_to_remove)
+    interim_text = remove_many_phrases(interim_text, negative_words)
+    #split source text into list
+    interim_list = interim_text.split(' ')
+    #check for censored words and censor words before and after
+    for i in range(len(interim_list) -1):
+        if interim_list[i+1] == "***":
+            interim_list[i] = "****"
+        if interim_list[i-1] == "***":
+            interim_list[i] = "****"
+    #join string, censor & return
+    final_text = ' '.join(interim_list)
+    final_text = remove_phrase(final_text, "****")
     return final_text
 
 print(remove_surrounding_phrases(email_four, proprietary_terms, negative_words))
